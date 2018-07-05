@@ -35,7 +35,7 @@ The first list has no cycle, so we return false and the hidden code checker prin
 The second list has a cycle, so we return true and the hidden code checker prints 1 to stdout.
 
 
-Program:
+Program 1: Using Floyd cycle algorithm
 
 /*
 Detect a cycle in a linked list. Note that the head pointer may be 'null' if the list is empty.
@@ -72,4 +72,37 @@ boolean hasCycle(Node head) {
         }
         return false;
     }
+}
+
+Program 2: Using Hashing.
+/*
+Detect a cycle in a linked list. Note that the head pointer may be 'null' if the list is empty.
+
+A Node is defined as: 
+    class Node {
+        int data;
+        Node next;
+    }
+*/
+
+boolean hasCycle(Node head) {
+    
+    // using Hashset
+    HashSet<Node> t = new HashSet<Node>();
+    
+    if(head == null){
+        return false;
+    }
+    while(head.next !=null){
+        if(t.contains(head.next))
+        {
+            return true;
+        }else
+        {
+            t.add(head.next);
+        }
+        head = head.next;        
+    }
+    
+   return false; 
 }
