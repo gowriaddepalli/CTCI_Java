@@ -1,0 +1,165 @@
+Check out the resources on the page's right side to learn more about bit manipulation. The video tutorial is by Gayle Laakmann McDowell, author of the best-selling interview book Cracking the Coding Interview.
+Link: https://www.hackerrank.com/challenges/ctci-lonely-integer/problem
+
+Consider an array of integers where all but one of the integers occur in pairs. In other words, every element occurs exactly twice except for one unique element. Find the unique element.
+
+For example, given the array , you would return .
+
+Function Description
+
+Complete the findLonely function in the editor below. It should return the unique integer in .
+
+findLonely has the following parameter(s):
+
+arr: an array of integers
+Input Format
+
+The first line contains a single integer, , denoting the number of integers in . 
+The second line contains  space-separated integers, each an element, .
+
+Constraints
+
+It is guaranteed that  is an odd number.
+, where .
+Output Format
+
+Print the unique number in  on a new line.
+
+Sample Input 0
+
+1
+1
+Sample Output 0
+
+1
+Explanation 0 
+The array only contains a single , so we print  as our answer.
+
+Sample Input 1
+
+3
+1 1 2
+Sample Output 1
+
+2
+Explanation 1 
+We have two 's and one . We print , because that's the only unique element in the array.
+
+Sample Input 2
+
+5
+0 0 1 2 1
+Sample Output 2
+
+2
+Explanation 2 
+We have two 's, two 's, and one . We print , because that's the only unique element in the array.
+
+
+Program 1: # Not a good method, o(n) Complexity 
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the findLonely function below.
+    static int findLonely(List<Integer> arr) {
+      
+        Hashtable<Integer,Integer> ht = new Hashtable<Integer,Integer>();
+        
+        for(int i=0;i< arr.size();i++){
+            if(!ht.containsKey(arr.get(i))){
+                ht.put(arr.get(i),1);
+            }else{
+                ht.put(arr.get(i), (ht.get(arr.get(i)) + 1));
+            }
+        }
+        
+        for(int i=0;i< arr.size();i++){
+            if(ht.get(arr.get(i)) == 1){
+                return arr.get(i); 
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+        String[] arrItems = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        List<Integer> arr = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int arrItem = Integer.parseInt(arrItems[i]);
+            arr.add(arrItem);
+        }
+
+        int res = findLonely(arr);
+
+        bufferedWriter.write(String.valueOf(res));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
+
+
+Program 2: Using Bit manipulation
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+
+    // Complete the findLonely function below.
+    static int findLonely(List<Integer> arr) {
+       
+       int val = 0;
+        
+        for(int i: arr){
+            //Any number XORed with itself gives zero, hence cancel out same number.
+            // Any number Xored with zero gives the number back again, hence giving the unique number.
+            val = val^i;
+        }
+        return val;
+    }
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+        String[] arrItems = bufferedReader.readLine().replaceAll("\\s+$", "").split(" ");
+
+        List<Integer> arr = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            int arrItem = Integer.parseInt(arrItems[i]);
+            arr.add(arrItem);
+        }
+
+        int res = findLonely(arr);
+
+        bufferedWriter.write(String.valueOf(res));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
+    }
+}
+
