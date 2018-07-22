@@ -1,0 +1,330 @@
+DFS: Connected Cell in a Grid
+
+Check out the resources on the page's right side to learn more about depth-first search. The video tutorial is by Gayle Laakmann McDowell, author of the best-selling interview book Cracking the Coding Interview.
+
+Consider a matrix where each cell contains either a  or a  and any cell containing a  is called a filled cell. Two cells are said to be connected if they are adjacent to each other horizontally, vertically, or diagonally. In the diagram below, the two colored regions show cells connected to the filled cells. Black on white are not connected.
+
+Cells adjacent to filled cells:  image
+
+If one or more filled cells are also connected, they form a region. Note that each cell in a region is connected to at least one other cell in the region but is not necessarily directly connected to all the other cells in the region.
+
+Regions:  image
+
+Given an  matrix, find and print the number of cells in the largest region in the matrix.
+
+Function Description
+
+Complete the function maxRegion in the editor below. It must return an integer value, the size of the largest region.
+
+maxRegion has the following parameter(s):
+
+grid: a two dimensional array of integers
+Input Format
+
+The first line contains an integer, , the number of rows in the matrix, . 
+The second line contains an integer, , the number of columns in the matrix.
+
+Each of the following  lines contains a row of  space-separated integers, .
+
+Constraints
+
+Output Format
+
+Print the number of cells in the largest region in the given matrix.
+
+Sample Input
+
+4
+4
+1 1 0 0
+0 1 1 0
+0 0 1 0
+1 0 0 0
+Sample Output
+
+5
+Explanation
+
+The diagram below depicts two regions of the matrix:
+
+image 
+The first region has five cells and the second region has one cell. We choose the larger region.
+
+
+Link: https://www.hackerrank.com/challenges/ctci-connected-cell-in-a-grid/problem
+
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.regex.*;
+
+public class Solution {
+     
+    static int max = 0;
+    static int max_final =0;
+    static int count =0;
+    static int backtrack_count =0;
+    // Complete the maxRegion function below.
+    static int maxRegion(int[][] grid) {
+      
+        //int count=0;
+        //int max = 0;
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        
+        int visited[][] = new int[n][m];
+        
+        for(int i =0; i<n; i++){
+            for(int j =0; j<m; j++){
+                visited[i][j] = 0;
+            }
+        }
+        
+        for(int g=0; g<n; g++){
+            for(int h =0; h< m; h++){
+                count = 0;
+                backtrack_count =0;
+                max=0;
+                System.out.println("######");
+                int p = dfs(grid, visited, g,h,count);
+                if(grid[g][h]==1){
+                    p++;
+                }
+                //System.out.println("######");
+                //System.out.println(p);
+                //System.out.println("#####");
+                if(p>max_final){
+                    max_final=p;
+                }
+           }
+        }
+        
+         return max_final;
+    }
+    
+    static int dfs(int[][] grid, int[][] visited ,int i,int j, int count){
+        
+        ArrayList<Integer[]> adjCell = getAdjacentCells(i,j,grid);
+        //System.out.println(i);
+        //System.out.println(j);
+        
+    
+        visited[i][j] =  1;
+                
+           for(Integer[] l : adjCell)
+           {
+            if(visited[l[0]][l[1]] != 1)
+            {
+                count++;
+                System.out.println(">>>>>");
+                System.out.println(count);
+                System.out.println(">>>>>");
+                //System.out.println(max);
+                if(count<max){
+                    backtrack_count++;
+                    System.out.println("@@@@@");
+                    System.out.println(backtrack_count);
+                    System.out.println("@@@@@");
+                }
+                dfs(grid, visited, l[0], l[1], count);
+            }
+        }
+        System.out.println("-----");
+        System.out.println(count);
+        System.out.println("-----");
+        if(count> max){
+            max = count;
+        }
+        System.out.println(max);
+        System.out.println("+++++++++");
+        System.out.println(backtrack_count);
+        System.out.println("+++++++++");
+        if(backtrack_count>0){
+            return max+backtrack_count;
+        }else{
+            return max;
+        }
+        
+    }
+    
+    static ArrayList<Integer[]> getAdjacentCells(int i, int j, int[][] grid){
+        
+        int n = grid.length;
+        //System.out.println(n);
+        int m = grid[0].length;
+        //System.out.println(m);
+        //System.out.println(i);
+        //System.out.println(j);
+        ArrayList<Integer[]> adjCell = null;
+        
+    
+
+        adjCell = new ArrayList<Integer[]>();
+        for(int p = i-1; p<=i+1; p++){
+            for(int q= j-1; q<=j+1; q++){
+                
+              if(p<0|| p>n-1 || q<0 || q>m-1)  
+               {
+            
+               }else
+              {
+                  
+                if(grid[p][q]==1)
+                {
+                {
+                    System.out.println("*******");
+                    System.out.println(p);
+                    System.out.println(q);
+                    System.out.println("*******"); 
+                    Integer cell[] = {new Integer(p),new Integer(q)};
+                    adjCell.add(cell); 
+                }    
+                }
+                }              
+            }
+        }
+    //}
+        return adjCell;
+    }
+
+    private static final Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int m = scanner.nextInt();
+        scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+        int[][] grid = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            String[] gridRowItems = scanner.nextLine().split(" ");
+            scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
+
+            for (int j = 0; j < m; j++) {
+                int gridItem = Integer.parseInt(gridRowItems[j]);
+                grid[i][j] = gridItem;
+            }
+        }
+        
+
+        int res = maxRegion(grid);
+
+        bufferedWriter.write(String.valueOf(res));
+        bufferedWriter.newLine();
+
+        bufferedWriter.close();
+
+        scanner.close();
+    }
+}
+
+
+
+Hackkerrank Solution:
+
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+    private int rows;
+    private int cols;
+    private int[][] grid;
+    
+    public Solution(int n, int m, int[][] grid) {
+        this.rows = n;
+        this.cols = m; 
+        this.grid = grid;
+    }
+
+    /** Returns true of cell is filled AND not yet visited**/
+    public boolean isValid (int x, int y) {
+        // Returns false if:
+        //  1. x or y is out of matrix's bounds
+        //  2. cell [x][y] was already visited (contains a -1) or is not filled (contains a 0)
+        if (    x < 0 
+            ||  y < 0 
+            ||  x >= rows 
+            ||  y >= cols 
+            ||  grid[x][y] < 1
+           ) {
+            return false;
+        }
+        else {
+            // Current cell is valid (i.e., exists in matrix, is filled and not yet visited)
+            return true;
+        }
+    }
+
+    /** Use DFS to return a count of the number of cells in the region connected to [x][y]. **/
+    public int dfs(int x, int y) {
+        if (isValid(x, y) == false) {
+            return 0;
+        }
+
+        int count = 1;
+        int newX = x;
+        int newY = y;
+        grid[x][y] = -1;
+        
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                newX = x + i;
+                newY = y + j;
+                
+                count = count + dfs(newX, newY);
+            }
+        }
+
+        return count;
+    }
+    
+    /** Find the largest region in the matrix. **/
+    public int solve() {
+        // Stores size of current largest region
+        int maxVal = 0;
+        // Stores size of region currently being checked
+        int tempVal = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                // Find the number of filled connected cells (if any) for this potential region
+                tempVal = dfs(i, j);
+                
+                // If the current region is larger than any previously checked region, set new maxVal
+                if(tempVal > maxVal) {
+                    maxVal = tempVal; 
+                }
+            }
+        }
+        
+        return maxVal;
+    }
+
+    /** Problem Setup **/
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        int[][] matrix = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {          
+                matrix[i][j] = scanner.nextInt();
+            }
+        }
+        scanner.close();
+        
+        Solution solution = new Solution(n, m, matrix);
+        System.out.println(solution.solve());
+        
+    }
+}
